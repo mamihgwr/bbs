@@ -1,0 +1,30 @@
+version: "4"
+services:
+  web:
+    build: ./config/web
+    ports:
+      - "8000:80"
+    volumes:
+      - ./html/app:/var/www/html
+    restart: always
+    depends_on:
+      - db
+      
+  db:
+    platform: linux/x86_64
+    image: mysql:8.0.19
+    ports:
+      - 13306:3306
+    volumes:
+      - db-store:/var/lib/mysql
+      - ./logs:/var/log/mysql
+      - ./dockerfiles/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    container_name: my-db
+    environment:
+      - MYSQL_DATABASE=hoge
+      - MYSQL_USER=hoge
+      - MYSQL_PASSWORD=pass
+      - MYSQL_ROOT_PASSWORD=pass
+      - TZ="Asia/Tokyo"
+volumes:
+  db-store:
